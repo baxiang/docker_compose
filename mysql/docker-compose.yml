@@ -2,8 +2,8 @@ version: '3'
 services:
   mysql-master:
     build:
-      context: ./
-      dockerfile: master/Dockerfile
+      context: ./master
+      dockerfile: Dockerfile
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     links:
@@ -17,8 +17,8 @@ services:
       - ./data/mysql/master:/var/lib/mysql
   mysql-slave:
     build:
-      context: ./
-      dockerfile: slave/Dockerfile
+      context: ./slave
+      dockerfile: Dockerfile
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     ports:
