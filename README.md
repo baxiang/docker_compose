@@ -10,4 +10,4 @@
 | nginx      |                                 |                                         |                                               |
 | openresty  |                                 |                                         |                                               |
 | prometheus |                                 |                                         | prometheus+grafana+alertmanager+node-exporter |
-
+|elasticsearch||单节点+多节点 支持kibana|
