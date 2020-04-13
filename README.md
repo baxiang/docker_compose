@@ -11,3 +11,4 @@
 | openresty  |                                 |                                         |                                               |
 | prometheus |                                 |                                         | prometheus+grafana+alertmanager+node-exporter |
 |elasticsearch|||单节点+多节点 支持kibana|
+|kafka||| kafka-manager+3kafka+1zk|
