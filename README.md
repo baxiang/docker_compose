@@ -6,7 +6,7 @@
 | consul     |                                 |                                         |                                               |
 | etcd       |                                 |                                         | 3个节点                                       |
 | kong       |                                 |                                         | kong+konga                                    |
-| mysql      |                                 |                                         |                                               |
+| mysql      |                                 |                                         |   支持单节点和主从节点同步方式                                            |
 | nginx      |                                 |                                         |                                               |
 | openresty  |                                 |                                         |                                               |
 | prometheus |                                 |                                         | prometheus+grafana+alertmanager+node-exporter |
