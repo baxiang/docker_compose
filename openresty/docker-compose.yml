@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  web:
+    image: openresty/openresty
+    container_name: openresty
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf

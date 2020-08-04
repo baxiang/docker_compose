@@ -1,0 +1,58 @@
+version: '3.7'
+
+networks:
+    monitor:
+        driver: bridge
+
+services:
+    prometheus:
+        image: prom/prometheus:v2.17.1
+        container_name: prometheus
+        restart: always
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./node_down.yml:/etc/prometheus/node_down.yml
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yml'
+            - "--storage.tsdb.path=/prometheus"
+            - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+            - "--web.console.templates=/usr/share/prometheus/consoles"
+            - "--storage.tsdb.retention.time=3d"
+            - '--web.enable-lifecycle'
+        ports:
+            - "9090:9090"
+        networks:
+            - monitor
+
+    alertmanager:
+        image: prom/alertmanager:latest
+        container_name: alertmanager
+        restart: always
+        volumes:
+            - ./alertmanager.yml:/etc/alertmanager/config.yml
+        command:
+            - '--config.file=/etc/alertmanager/config.yml'
+        ports:
+            - "9093:9093"
+        networks:
+            - monitor
+
+    grafana:
+        image: grafana/grafana:6.7.1
+        container_name: grafana
+        hostname: grafana
+        restart: always
+        ports:
+            - "3000:3000"
+        networks:
+            - monitor
+
+    node-exporter:
+        image: prom/node-exporter:latest
+        container_name: node-exporter
+        hostname: node-exporter
+        restart: always
+        ports:
+            - "9100:9100"
+        networks:
+            - monitor

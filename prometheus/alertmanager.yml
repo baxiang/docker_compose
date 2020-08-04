@@ -1,0 +1,18 @@
+global: 
+  smtp_smarthost: 'smtp.xxx.com:25'
+  smtp_from: 'user@xxx.com'
+  smtp_auth_username: 'user@xxx.com'
+  smtp_auth_password: 'pwd123456'
+  smtp_require_tls: false
+
+route: 
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 10m
+  receiver: live-monitoring
+
+receivers: 
+  - name: 'live-monitoring'
+    email_configs: 
+    - to: 'xxx@qq.com'
