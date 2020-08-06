@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql-master:
+    image: mysql:5.7
+    container_name: mysql-master
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    links:
+      - mysql-slave
+    ports:
+      - "33065:3306"
+    restart: always
+    volumes:
+      - ./mysql/master/data:/var/lib/mysql
+      - ./mysql/master/my.cnf:/etc/mysql/my.cnf
+  mysql-slave:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "33066:3306"
+    restart: always
+    container_name: mysql-slave
+    volumes:
+      - ./mysql/slave/data:/var/lib/mysql
+      - ./mysql/slave/my.cnf:/etc/mysql/my.cnf

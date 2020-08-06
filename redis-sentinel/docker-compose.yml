@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  # master
+  redis-master:
+    image: redis
+    container_name: redis-master
+    restart: always
+    ports:
+      - "6379:6379"
+ 
+  redis-slave-1:
+    image: redis
+    container_name: redis-slave-1
+    restart: always
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - redis-master
+    ports:
+      - "6380:6379"
+  redis-slave-2:
+    image: redis
+    container_name: redis-slave-2
+    restart: always
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - redis-master
+    ports:
+      - "6381:6379"
+  # Instance 1
+  redis-sentinel-1:
+    build: sentinel
+    links:
+      - redis-master
+      - redis-slave-1
+ 
+  # Instance 2
+  redis-sentinel-2:
+    build: 
+      context: ./redis-sentinel
+    links:
+      - redis-master
+      - redis-slave-2
