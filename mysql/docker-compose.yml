@@ -1,7 +1,8 @@
 version: '3'
 services:
   mysql-master:
-    image: mysql:5.7.17
+    image: mysql:5.7
+    container_name: mysql-master
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     links:
@@ -9,23 +10,17 @@ services:
     ports:
       - "33065:3306"
     restart: always
-    hostname: mysql-master
-    container_name: mysql-master
     volumes:
-      - mysql-master:/var/lib/mysql
-      - ./master.cnf:/etc/mysql/my.cnf
+      - ./mysql/master/data:/var/lib/mysql
+      - ./mysql/master/my.cnf:/etc/mysql/my.cnf
   mysql-slave:
-    image: mysql:5.7.17
+    image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     ports:
       - "33066:3306"
     restart: always
-    hostname: mysql-slave
     container_name: mysql-slave
     volumes:
-      - mysql-slave:/var/lib/mysql
-      - ./slave.cnf:/etc/mysql/my.cnf
-volumes:
-    mysql-master:
-    mysql-slave:
+      - ./mysql/slave/data:/var/lib/mysql
+      - ./mysql/slave/my.cnf:/etc/mysql/my.cnf
