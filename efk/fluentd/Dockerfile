@@ -1,7 +1,9 @@
-FROM fluent/fluentd:v1.3.2 
-#ADD fluent.conf /etc/fluent/
+FROM fluent/fluentd:v1.11-1
 USER root
-RUN echo "source 'https://mirrors.tuna.tsinghua.edu.cn/rubygems/'" > Gemfile && gem install bundler
-#RUN gem install fluent-plugin-kafka -v 0.12.3 --no-document
-RUN gem install fluent-plugin-elasticsearch -v 4.0.3 --no-document
-CMD ["fluentd"]
+RUN apk add --no-cache --update --virtual .build-deps \
+    sudo build-base ruby-dev \
+    && sudo gem install fluent-plugin-elasticsearch \
+    && sudo gem sources --clear-all \
+    && apk del .build-deps \
+    && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
+USER fluent
