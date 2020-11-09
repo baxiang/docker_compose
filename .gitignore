@@ -2,3 +2,4 @@
 nginx/conf.d/*.conf
 nginx/log/
 movies/
+kong/plugins/.idea/

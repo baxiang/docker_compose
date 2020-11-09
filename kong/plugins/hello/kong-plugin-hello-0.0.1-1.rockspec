@@ -11,13 +11,13 @@ local pluginName = package:match("^kong%-plugin%-(.+)$")  -- "myPlugin"
 
 supported_platforms = {"linux", "macosx"}
 source = {
-  url = "https://github.com/chenyoufu/kong-plugin-huidu.git",
+  url = "https://github.com/Kong/kong/tree/master/kong/plugins/request-termination",
   tag = "0.0.1"
 }
 
 description = {
   summary = "Kong is a scalable and customizable API Management Layer built on top of Nginx.",
-  homepage = "http://getkong.org",
+  homepage = "https://github.com/Kong/kong/tree/master/kong/plugins/request-termination",
   license = "Apache 2.0"
 }
 

@@ -1,51 +1,37 @@
--- If you're not sure your plugin is executing, uncomment the line below and restart Kong
--- then it will throw an error which indicates the plugin is being loaded at least.
-
---assert(ngx.get_phase() == "timer", "The world is coming to an end!")
+local kong = kong
 
 
--- Grab pluginname from module name
-local plugin_name = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
+local DEFAULT_RESPONSE = {
+  [401] = "未授权",
+  [404] = "404 Not found",
+  [405] = "Method not allowed",
+  [500] = "An unexpected error occurred",
+  [502] = "Bad Gateway",
+  [503] = "服务不可用",
+}
 
--- load the base plugin object and create a subclass
-local plugin = require("kong.plugins.base_plugin"):extend()
 
--- constructor
-function plugin:new()
-  plugin.super.new(self, plugin_name)
-  
-  -- do initialization here, runs in the 'init_by_lua_block', before worker processes are forked
+local RequestTerminationHandler = {}
 
+
+RequestTerminationHandler.PRIORITY = 2
+RequestTerminationHandler.VERSION = "2.0.1"
+
+
+function RequestTerminationHandler:access(conf)
+  local status  = conf.status_code
+  local content = conf.body
+  if content then
+    local headers = {
+      ["Content-Type"] = conf.content_type
+    }
+
+    return kong.response.exit(status, content, headers)
+  end
+
+  local message = conf.message or DEFAULT_RESPONSE[status]
+  return kong.response.exit(status, message and { message = message } or nil)
 end
 
----[[ runs in the 'access_by_lua_block'
-function plugin:access(plugin_conf)
-  plugin.super.access(self)
 
-  -- your custom code here
-  local pattern = plugin_conf.pattern
-  local token = kong.request.get_header("authorization")
-  if token == nil then
-    return 
-  end
-  -- 忽略大小写
-  local matched = ngx.re.match(token, pattern, "joi")
-  if matched then
-    -- 设置upstream
-    local ok, err = kong.service.set_upstream(plugin_conf.upstream)
-    if not ok then
-        kong.log.err(err)
-        return
-    end
-    -- 匹配成功添加特定头部方便监控
-    ngx.req.set_header("X-Kong-" .. plugin_name .. "-upstream", plugin_conf.upstream)
-    ngx.req.set_header("X-Kong-" .. plugin_name .. "-pattern", plugin_conf.pattern)
-  end    
-  
-end --]]
-
--- set the plugin priority, which determines plugin execution order
-plugin.PRIORITY = 1000
-
--- return our plugin object
-return plugin
+return RequestTerminationHandler
