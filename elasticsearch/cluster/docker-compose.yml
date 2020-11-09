@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   es01:
-    image:  docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: es01
     environment:
       - node.name=es01
@@ -9,19 +9,19 @@ services:
       - discovery.seed_hosts=es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - es-data01:/usr/share/elasticsearch/data
+      - data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
-      - elastic-cluster
+      - elastic
   es02:
-    image:  docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: es02
     environment:
       - node.name=es02
@@ -29,17 +29,17 @@ services:
       - discovery.seed_hosts=es01,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - es-data02:/usr/share/elasticsearch/data
+      - data02:/usr/share/elasticsearch/data
     networks:
-      - elastic-cluster
+      - elastic
   es03:
-    image:  docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: es03
     environment:
       - node.name=es03
@@ -47,24 +47,24 @@ services:
       - discovery.seed_hosts=es01,es02
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - es-data03:/usr/share/elasticsearch/data    
+      - data03:/usr/share/elasticsearch/data
     networks:
-      - elastic-cluster
+      - elastic
 
 volumes:
-  es-data01:
+  data01:
     driver: local
-  es-data02:
+  data02:
     driver: local
-  es-data03:
-    driver: local    
+  data03:
+    driver: local
 
 networks:
-  elastic-cluster:
+  elastic:
     driver: bridge

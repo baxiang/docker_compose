@@ -69,6 +69,9 @@ services:
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
     depends_on:
       - kong-database
+    volumes:
+      - ./plugins:/usr/local/kong/plugins/
+      - ./kong.conf:/etc/kong/kong.conf  
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s

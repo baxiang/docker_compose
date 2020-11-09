@@ -1,3 +1,4 @@
 
 nginx/conf.d/*.conf
 nginx/log/
+movies/
