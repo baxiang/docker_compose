@@ -70,7 +70,9 @@ services:
     depends_on:
       - kong-database
     volumes:
+      - ./go-pluginserver/go-pluginserver:/usr/local/bin/go-pluginserver
       - ./plugins:/usr/local/kong/plugins/
+      - ./go-plugins:/usr/local/kong/go_plugins/
       - ./kong.conf:/etc/kong/kong.conf  
     healthcheck:
       test: ["CMD", "kong", "health"]
